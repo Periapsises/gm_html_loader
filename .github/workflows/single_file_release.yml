@@ -8,6 +8,9 @@ on:
 jobs:
   concatenate-and-create-artifact:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
 
     steps:
       - name: Checkout repository
