@@ -13,8 +13,6 @@ local function sendHTMLFileContents( ply, fileName, fileContents )
     net.WriteData( compressed, compressedLength )
 
     net.Send( ply )
-
-    print( fileName, fileContents )
 end
 
 local function sendError( ply, fileName )
