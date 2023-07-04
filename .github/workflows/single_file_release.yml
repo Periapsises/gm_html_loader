@@ -6,8 +6,11 @@ on:
       - main
 
 jobs:
-  concatenate-and-create-artifact:
+  create-and-release-single-file:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
 
     steps:
       - name: Checkout repository
@@ -27,14 +30,6 @@ jobs:
           name: concatenated-file
           path: lua/autorun/sh_html_loader.lua
 
-  publish-artifact:
-    needs: concatenate-and-create-artifact
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      packages: write
-
-    steps:
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
