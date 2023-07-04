@@ -24,13 +24,44 @@ html:Dock( FILL )
 html:OpenFile( "index.html" )
 ```
 
+## Javascript and CSS substitution
+
+When loading an HTML file, imported scripts and stylesheets will automatically be fetched and substituted within the HTML file.  
+The only exception is for paths that are `http:`, `https:` and `asset:`.
+
+For example
+ - lua/html/includes/index.html.lua
+```html
+<html>
+  <body>
+    <script src="index.js"></script>
+  </body>
+</html>
+```
+ - lua/html/includes/index.js.lua
+```js
+console.log( 'Hello, world!" )
+```
+Will be converted into:
+```html
+<html>
+  <body>
+<script>
+console.log( 'Hello, world!" )
+</script>
+  </body>
+</html>
+```
+
 ## A quick tip
 
-The contents of those HTML files disguised as Lua is purely HTML syntax.  
-Therefore a useful setting for those using Visual Studio Code is to add a custom extension to set the display to HTML automatically.  
-By using a `.html.lua` extension, one can add the following setting to VSCode:
+The contents of those HTML files disguised as Lua does not contain any Lua syntax. 
+Therefore a useful setting for those using Visual Studio Code is to add a custom extension to set the proper language automatically.  
+In VSCode, the following setting adds syntax highlighting for these kinds of files:
 ```json
 "files.associations": {
-  "*.html.lua": "html"
+  "*.html.lua": "html",
+  "*.js.lua": "javascript"
+  "*.css.lua": "css"
 }
 ```
