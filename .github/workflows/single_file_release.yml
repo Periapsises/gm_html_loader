@@ -15,11 +15,11 @@ jobs:
 
       - name: Concatenate files
         run: |
-          echo "if SERVER then\r\n\r\n" > lua/autorun/sh_html_loader.lua
+          echo -e "if SERVER then\r\n\r\n" > lua/autorun/sh_html_loader.lua
           cat lua/autorun/server/sv_html_loader.lua >> lua/autorun/sh_html_loader.lua
-          echo "\r\n\r\nelse\r\n\r\n" >> lua/autorun/sh_html_loader.lua
+          echo -e "\r\n\r\nelse\r\n\r\n" >> lua/autorun/sh_html_loader.lua
           cat lua/autorun/client/cl_html_loader.lua >> lua/autorun/sh_html_loader.lua
-          echo "\r\n\r\nend\r\n" >> lua/autorun/sh_html_loader.lua
+          echo -e "\r\n\r\nend\r\n" >> lua/autorun/sh_html_loader.lua
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
