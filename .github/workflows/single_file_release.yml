@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  concatenate-and-release:
+  concatenate-and-create-artifact:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,3 +26,27 @@ jobs:
         with:
           name: concatenated-file
           path: lua/autorun/sh_html_loader.lua
+
+  publish-artifact:
+    needs: concatenate-and-create-artifact
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: concatenated-file
+
+      - name: Create release asset
+        id: create_asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.concatenate-and-create-artifact.outputs.create_release.upload_url }}
+          asset_path: ./lua/autorun/sh_html_loader.lua
+          asset_name: sh_html_loader.lua
+          asset_content_type: text/plain
+
+      - name: Display download URL
+        run: echo "Download at ${{ steps.create_asset.outputs.browser_download_url }}"
