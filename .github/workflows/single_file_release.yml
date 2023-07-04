@@ -1,0 +1,40 @@
+name: Release Single File
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  concatenate-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Concatenate files
+        run: |
+          echo "if SERVER then\r\n\r\n" > lua/autorun/sh_html_loader.lua
+          cat lua/autorun/server/sv_html_loader.lua >> lua/autorun/sh_html_loader.lua
+          echo "\r\n\r\nelse\r\n\r\n" >> lua/autorun/sh_html_loader.lua
+          cat lua/autorun/client/cl_html_loader.lua >> lua/autorun/sh_html_loader.lua
+          echo "\r\n\r\nend\r\n" >> lua/autorun/sh_html_loader.lua
+
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: release-${{ github.sha }}
+          release_name: Release ${{ github.sha }}
+          body: Single file release from source files
+          draft: false
+          prerelease: false
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: concatenated-file
+          path: lua/autorun/sh_html_loader.lua
