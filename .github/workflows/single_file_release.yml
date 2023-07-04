@@ -8,9 +8,6 @@ on:
 jobs:
   concatenate-and-create-artifact:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      packages: write
 
     steps:
       - name: Checkout repository
@@ -33,6 +30,9 @@ jobs:
   publish-artifact:
     needs: concatenate-and-create-artifact
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
 
     steps:
       - name: Download artifact
