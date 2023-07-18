@@ -3,7 +3,7 @@ local responseCallbacks = {}
 
 local function getHTMLFileContentsAsync( fileName, callback )
     if htmlFileCache[fileName] then
-        return htmlFileCache[fileName]
+        return callback( fileName, htmlFileCache[fileName] )
     end
 
     net.Start( "HTMLLoader_GetHTMLFileContents" )
@@ -46,7 +46,11 @@ local function patchDHTMLPanel()
 
     function dhtmlControls:OpenFile( fileName )
         local contents = getHTMLFileContentsAsync( fileName, function( fileName, contents )
-            if not contents then return end
+            if not contents then
+                print( "[HTML Loader] Couldn't get html contents for " .. tostring( self ) )
+                return
+            end
+
             self:SetHTML( contents )
         end )
     end
